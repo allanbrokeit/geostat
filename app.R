@@ -19,7 +19,7 @@ ui <- fluidPage(
                 accept = c(".gpx", ".zip"))
         ),
         mainPanel(
-          textOutput("summary")
+          htmlOutput("summary")
         )
       )
     ),
@@ -115,11 +115,34 @@ server <- function(input, output) {
 #    file.copy(input$upload$datapath, t)
 #  })
 
-  output$summary = renderText({
+  output$summary = renderUI({
     if(is.null(gc())) {
-      "Please upload your GPX file!"
+      tags$div(
+        tags$h3("GeoStats - Calculate Interesting Statistics About Your Geocache Finds"),
+        tags$br(),
+        tags$p("Please upload your GPX file!"),
+        tags$br(),
+        tags$p("To generate a GPX file of your finds, go to the",
+                tags$b(tags$em(tags$a(href="https://www.geocaching.com/pocket/", "Pocket Query"))),
+                "page of the",
+                tags$a(href="https://www.geocaching.com/", "Geocaching website."),
+                "Scroll down until you see",
+                tags$b(tags$em("My Finds")),
+                "and click the",
+                tags$b(tags$em("Add to Queue")),
+                "button. After a few minutes, you will be sent an email saying your pocket query is
+                 ready to download. You can then download the file in the",
+                tags$b(tags$em("Pocket Queries Ready for Download")),
+                "tab on the same page. Your pocket query will be returned in a Zip file containing
+                 a GPX file of your finds. You can upload the zip without extracting."),
+        tags$br(),
+        tags$p("GPX files created via other means (e.g. in GSAK) should also work."),
+        tags$br(),
+        tags$p("For an bugs in reading a GPX file, please",
+               tags$a(href="mailto:geoardom@gmail.com", "email the author"))
+      )
     } else {
-      paste("# caches: ", nrow(gc()))
+      HTML(paste("# caches: ", nrow(gc())))
     }
   })
 
