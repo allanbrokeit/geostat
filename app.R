@@ -27,7 +27,7 @@ ui <- fluidPage(
     tabPanel("D/T",	
       sidebarLayout(
         sidebarPanel(
-          helpText("Filter caches included in plot by type and size."),
+          helpText("Filter caches included in chart by type and size."),
 
           selectInput("dt_type", 
             label = "Type",
@@ -49,7 +49,7 @@ ui <- fluidPage(
     tabPanel("Found Date",	
       sidebarLayout(
         sidebarPanel(
-          helpText("Filter caches included in plot by type and size."),
+          helpText("Filter caches included in chart by type and size."),
 
           selectInput("fd_type", 
             label = "Type",
@@ -118,7 +118,7 @@ server <- function(input, output) {
   output$summary = renderUI({
     if(is.null(gc())) {
       tags$div(
-        tags$h3("GeoStats - Calculate Interesting Statistics About Your Geocache Finds"),
+        tags$h3("GeoStats - Calculate Interesting Statistics About Your Geocache Finds", align = "center"),
         tags$br(),
         tags$p("Please upload your GPX file!"),
         tags$br(),
@@ -138,11 +138,15 @@ server <- function(input, output) {
         tags$br(),
         tags$p("GPX files created via other means (e.g. in GSAK) should also work."),
         tags$br(),
-        tags$p("For an bugs in reading a GPX file, please",
+        tags$p("For any bugs in reading a GPX file, please",
                tags$a(href="mailto:geoardom@gmail.com", "email the author"))
       )
     } else {
-      HTML(paste("# caches: ", nrow(gc())))
+      tags$div(
+        tags$h3("Summary of Your Geocache Finds", align = "center"),
+        tags$br(),
+        tags$p("Number of geocaches found:", nrow(gc()))
+      )
     }
   })
 
@@ -196,7 +200,11 @@ server <- function(input, output) {
     params[["dt"]] = sum(t)
     params[["ndt"]] = length(which(t!=0))
 
-    do.call(htmlTemplate, params)
+    tags$div(
+      tags$h3("Number of Geocaches Found Per Difficulty/Terrain Combination", align = "center"),
+      tags$br(),
+      do.call(htmlTemplate, params)
+    )
   })
   
   output$fd <- renderUI({
@@ -244,7 +252,12 @@ server <- function(input, output) {
     
     params[["fdc"]] = length(which(fd!=0))
 
-    do.call(htmlTemplate, params)
+
+    tags$div(
+      tags$h3("Number of Geocaches Found Per Calendar Date", align = "center"),
+      tags$br(),
+      do.call(htmlTemplate, params)
+    )
   })
 }
 
