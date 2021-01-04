@@ -197,15 +197,15 @@ server <- function(input, output) {
                HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D5.0:", length(which(gc()$difficulty == 5)), tags$br()),
         tags$br(),
         tags$p(tags$b("Finds by cache terrain:")),
-        tags$p(HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D1.0:", length(which(gc()$terrain == 1)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D1.5:", length(which(gc()$terrain == 1.5)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D2.0:", length(which(gc()$terrain == 2)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D2.5:", length(which(gc()$terrain == 2.5)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D3.0:", length(which(gc()$terrain == 3)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D3.5:", length(which(gc()$terrain == 3.5)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D4.0:", length(which(gc()$terrain == 4)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D4.5:", length(which(gc()$terrain == 4.5)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D5.0:", length(which(gc()$terrain == 5)), tags$br())
+        tags$p(HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T1.0:", length(which(gc()$terrain == 1)), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T1.5:", length(which(gc()$terrain == 1.5)), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T2.0:", length(which(gc()$terrain == 2)), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T2.5:", length(which(gc()$terrain == 2.5)), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T3.0:", length(which(gc()$terrain == 3)), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T3.5:", length(which(gc()$terrain == 3.5)), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T4.0:", length(which(gc()$terrain == 4)), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T4.5:", length(which(gc()$terrain == 4.5)), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T5.0:", length(which(gc()$terrain == 5)), tags$br())
       )
     }
   })
