@@ -46,7 +46,7 @@ ui <- fluidPage(
       )
     ),
 
-    tabPanel("Found Date",	
+    tabPanel("Found Date (T/S)",
       sidebarLayout(
         sidebarPanel(
           helpText("Filter caches included in chart by type and size."),
@@ -63,7 +63,30 @@ ui <- fluidPage(
             selected = "All")
         ),
         mainPanel(
-          htmlOutput("fd")
+          htmlOutput("fdts")
+        )
+      )
+    ),
+
+    tabPanel("Found Date (D/T)",
+      sidebarLayout(
+        sidebarPanel(
+          helpText("Filter caches included in chart by difficulty and terrain."),
+
+          selectInput("fd_difficulty",
+            label = "Difficulty",
+            choices = list("All", "1.0", "1.5", "2.0", "2.5", "3.0", "3.5",
+                           "4.0", "4.5", "5.0"),
+            selected = "All"),
+
+          selectInput("fd_terrain",
+            label = "Terrain",
+            choices = list("All", "1.0", "1.5", "2.0", "2.5", "3.0", "3.5",
+                           "4.0", "4.5", "5.0"),
+            selected = "All")
+        ),
+        mainPanel(
+          htmlOutput("fddt")
         )
       )
     )
@@ -244,7 +267,7 @@ server <- function(input, output) {
     )
   })
   
-  output$fd <- renderUI({
+  output$fdts <- renderUI({
     if(is.null(gc()))
       return(NULL)
 
@@ -259,14 +282,67 @@ server <- function(input, output) {
     }
 
     fd = matrix(0, nrow=12, ncol=31)
-    
+
     for(i in w) {
       month = as.numeric(substr(gc()$found_date[i],6,7))
       date = as.numeric(substr(gc()$found_date[i],9,10))
       fd[month, date] = fd[month, date] + 1
     }
     m = max(fd)
+
+    params = list()
+    params[["filename"]] = "www/calendar.html"
+
+    ml = c(31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+
+    for(i in 1:12) {
+      for(j in 1:ml[i]) {
+        params[[paste("m",i,"d",j, sep="")]] = ifelse(fd[i,j], fd[i,j], "")
+        params[[paste("m",i,"d",j,"c", sep="")]] = getBackgroundColour(fd, i, j, m)
+      }
+    }
+
+    for(i in 1:12) {
+      params[[paste("m",i, sep="")]] = sum(fd[i,])
+    }
+
+    for(i in 1:31) {
+      params[[paste("d",i, sep="")]] = sum(fd[,i])
+    }
     
+    params[["fdc"]] = length(which(fd!=0))
+
+
+    tags$div(
+      tags$h3("Number of Geocaches Found Per Calendar Date", align = "center"),
+      tags$br(),
+      do.call(htmlTemplate, params)
+    )
+  })
+
+  output$fddt <- renderUI({
+    if(is.null(gc()))
+      return(NULL)
+
+    if(input$fd_difficulty != "All" && input$fd_terrain != "All") {
+      w = which(gc()$difficulty == as.numeric(input$fd_difficulty) & gc()$terrain == as.numeric(input$fd_terrain))
+    } else if (input$fd_difficulty != "All") {
+      w = which(gc()$difficulty == as.numeric(input$fd_difficulty))
+    } else if (input$fd_terrain != "All") {
+      w = which(gc()$terrain == as.numeric(input$fd_terrain))
+    } else {
+      w = 1:nrow(gc())
+    }
+
+    fd = matrix(0, nrow=12, ncol=31)
+
+    for(i in w) {
+      month = as.numeric(substr(gc()$found_date[i],6,7))
+      date = as.numeric(substr(gc()$found_date[i],9,10))
+      fd[month, date] = fd[month, date] + 1
+    }
+    m = max(fd)
+
     params = list()
     params[["filename"]] = "www/calendar.html"
 
