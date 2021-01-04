@@ -402,8 +402,8 @@ server <- function(input, output) {
       return(NULL)
 
     n = nrow(gc())
-    md = mean(as.numeric(gc()$difficulty))
-    mt = mean(as.numeric(gc()$terrain))
+    md = mean(as.numeric(as.character(gc()$difficulty)))
+    mt = mean(as.numeric(as.character(gc()$terrain)))
 
     tags$div(
       tags$h3("Number of Caches Required to Achieve Targetted Average", align = "center"),
