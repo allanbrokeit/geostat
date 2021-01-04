@@ -89,6 +89,30 @@ ui <- fluidPage(
           htmlOutput("fddt")
         )
       )
+    ),
+
+    tabPanel("D/T Target",
+      sidebarLayout(
+        sidebarPanel(
+          helpText("Calculate number of caches needed for average D/T."),
+
+          numericInput(inputId = "target_d",
+             label = "Average Difficulty",
+             value = 2.0,
+             min = 1,
+             max = 5,
+             step = 0.1),
+          numericInput(inputId = "target_t",
+             label = "Average Terrain",
+             value = 2.0,
+             min = 1,
+             max = 5,
+             step = 0.1)
+        ),
+        mainPanel(
+          htmlOutput("dt_target")
+        )
+      )
     )
   )
 )
@@ -372,6 +396,45 @@ server <- function(input, output) {
       do.call(htmlTemplate, params)
     )
   })
+
+  output$dt_target <- renderUI({
+    if(is.null(gc()))
+      return(NULL)
+
+    n = nrow(gc())
+    md = mean(as.numeric(gc()$difficulty))
+    mt = mean(as.numeric(gc()$terrain))
+
+    tags$div(
+      tags$h3("Number of Caches Required to Achieve Targetted Average", align = "center"),
+      tags$br(),
+      tags$p(tags$b("Difficulty:")),
+      tags$p(HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "Current Average:", round(md, digits = 3)),
+      tags$p(HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "Caches Required for Target of", input$target_d),
+      tags$p(HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), "D1.0: ", target_needed(input$target_d, md, n, 1.0), tags$br(),
+             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), "D1.5: ", target_needed(input$target_d, md, n, 1.5), tags$br(),
+             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), "D2.0: ", target_needed(input$target_d, md, n, 2.0), tags$br(),
+             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), "D2.5: ", target_needed(input$target_d, md, n, 2.5), tags$br(),
+             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), "D3.0: ", target_needed(input$target_d, md, n, 3.0), tags$br(),
+             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), "D3.5: ", target_needed(input$target_d, md, n, 3.5), tags$br(),
+             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), "D4.0: ", target_needed(input$target_d, md, n, 4.0), tags$br(),
+             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), "D4.5: ", target_needed(input$target_d, md, n, 4.5), tags$br(),
+             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), "D5.0: ", target_needed(input$target_d, md, n, 5.0), tags$br()),
+      tags$br(),
+      tags$p(tags$b("Terrain:")),
+      tags$p(HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "Current Average:", round(mt, digits = 3)),
+      tags$p(HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "Caches Required for Target of", input$target_t),
+      tags$p(HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), "T1.0: ", target_needed(input$target_t, mt, n, 1.0), tags$br(),
+             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), "T1.5: ", target_needed(input$target_t, mt, n, 1.5), tags$br(),
+             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), "T2.0: ", target_needed(input$target_t, mt, n, 2.0), tags$br(),
+             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), "T2.5: ", target_needed(input$target_t, mt, n, 2.5), tags$br(),
+             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), "T3.0: ", target_needed(input$target_t, mt, n, 3.0), tags$br(),
+             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), "T3.5: ", target_needed(input$target_t, mt, n, 3.5), tags$br(),
+             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), "T4.0: ", target_needed(input$target_t, mt, n, 4.0), tags$br(),
+             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), "T4.5: ", target_needed(input$target_t, mt, n, 4.5), tags$br(),
+             HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), "T5.0: ", target_needed(input$target_t, mt, n, 5.0), tags$br())
+    )
+})
 }
 
 

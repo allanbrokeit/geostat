@@ -59,6 +59,14 @@ parseFoundDate <- function(wpt) {
   return(d)
 }
 
+target_needed <- function(target, average, count, level) {
+  if((target > average & level > target) | (target < average & level < target )) {
+    return(ceiling((target - average) * count / (level - target)))
+  }
+
+  return("-")
+}
+
 
 getBackgroundColour <- function(tt, d, t, m) {
   if(tt[d,t] == 0) 
