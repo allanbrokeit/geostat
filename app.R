@@ -137,11 +137,11 @@ server <- function(input, output) {
     wpt = top[which(names(top) == "wpt")]
     n = length(wpt)
 
-    terrain = vector()
-    difficulty = vector()
-    type = vector()
-    container = vector()
-    found_date = vector()
+    terrain = character()
+    difficulty = character()
+    type = character()
+    container = character()
+    found_date = character()
 
     for(i in 1:n) {
       difficulty[i] = xmlValue(wpt[[i]][[ "cache" ]][[ "difficulty" ]])
@@ -210,26 +210,26 @@ server <- function(input, output) {
                HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "Other:", length(which(gc()$container == "Other")), tags$br()),
         tags$br(),
         tags$p(tags$b("Finds by cache difficulty:")),
-        tags$p(HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D1.0:", length(which(gc()$difficulty == 1)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D1.5:", length(which(gc()$difficulty == 1.5)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D2.0:", length(which(gc()$difficulty == 2)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D2.5:", length(which(gc()$difficulty == 2.5)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D3.0:", length(which(gc()$difficulty == 3)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D3.5:", length(which(gc()$difficulty == 3.5)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D4.0:", length(which(gc()$difficulty == 4)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D4.5:", length(which(gc()$difficulty == 4.5)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D5.0:", length(which(gc()$difficulty == 5)), tags$br()),
+        tags$p(HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D1.0:", length(which(gc()$difficulty == "1.0")), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D1.5:", length(which(gc()$difficulty == "1.5")), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D2.0:", length(which(gc()$difficulty == "2.0")), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D2.5:", length(which(gc()$difficulty == "2.5")), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D3.0:", length(which(gc()$difficulty == "3.0")), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D3.5:", length(which(gc()$difficulty == "3.5")), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D4.0:", length(which(gc()$difficulty == "4.0")), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D4.5:", length(which(gc()$difficulty == "4.5")), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "D5.0:", length(which(gc()$difficulty == "5.0")), tags$br()),
         tags$br(),
         tags$p(tags$b("Finds by cache terrain:")),
-        tags$p(HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T1.0:", length(which(gc()$terrain == 1)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T1.5:", length(which(gc()$terrain == 1.5)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T2.0:", length(which(gc()$terrain == 2)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T2.5:", length(which(gc()$terrain == 2.5)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T3.0:", length(which(gc()$terrain == 3)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T3.5:", length(which(gc()$terrain == 3.5)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T4.0:", length(which(gc()$terrain == 4)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T4.5:", length(which(gc()$terrain == 4.5)), tags$br(),
-               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T5.0:", length(which(gc()$terrain == 5)), tags$br())
+        tags$p(HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T1.0:", length(which(gc()$terrain == "1.0")), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T1.5:", length(which(gc()$terrain == "1.5")), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T2.0:", length(which(gc()$terrain == "2.0")), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T2.5:", length(which(gc()$terrain == "2.5")), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T3.0:", length(which(gc()$terrain == "3.0")), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T3.5:", length(which(gc()$terrain == "3.5")), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T4.0:", length(which(gc()$terrain == "4.0")), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T4.5:", length(which(gc()$terrain == "4.5")), tags$br(),
+               HTML("&nbsp;&nbsp;&nbsp;&nbsp;"), "T5.0:", length(which(gc()$terrain == "5.0")), tags$br())
       )
     }
   })
@@ -248,7 +248,7 @@ server <- function(input, output) {
       w = 1:nrow(gc())
     }
 
-    l = c(1,1.5,2,2.5,3,3.5,4,4.5,5)
+    l = c("1.0","1.5","2.0","2.5","3.0","3.5","4.0","4.5","5.0")
     t = table(factor(NULL, levels=l), factor(NULL, levels=l))
 
     for(i in 1:9) {
@@ -349,11 +349,11 @@ server <- function(input, output) {
       return(NULL)
 
     if(input$fd_difficulty != "All" && input$fd_terrain != "All") {
-      w = which(gc()$difficulty == as.numeric(input$fd_difficulty) & gc()$terrain == as.numeric(input$fd_terrain))
+      w = which(gc()$difficulty == input$fd_difficulty & gc()$terrain == input$fd_terrain)
     } else if (input$fd_difficulty != "All") {
-      w = which(gc()$difficulty == as.numeric(input$fd_difficulty))
+      w = which(gc()$difficulty == input$fd_difficulty)
     } else if (input$fd_terrain != "All") {
-      w = which(gc()$terrain == as.numeric(input$fd_terrain))
+      w = which(gc()$terrain == input$fd_terrain)
     } else {
       w = 1:nrow(gc())
     }
@@ -402,8 +402,8 @@ server <- function(input, output) {
       return(NULL)
 
     n = nrow(gc())
-    md = mean(as.numeric(as.character(gc()$difficulty)))
-    mt = mean(as.numeric(as.character(gc()$terrain)))
+    md = mean(as.numeric(gc()$difficulty))
+    mt = mean(as.numeric(gc()$terrain))
 
     tags$div(
       tags$h3("Number of Caches Required to Achieve Targetted Average", align = "center"),
